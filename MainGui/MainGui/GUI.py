@@ -1,3 +1,4 @@
+
 # -*- coding: utf-8 -*-
 """
 Created on Sun Jun 23 14:04:25 2024
@@ -19,11 +20,12 @@ class ColorfulButtonsApp:
 
         # Define button configurations with labels, colors, and callback functions
         button_configs = [
+            ("O- Sample creation", "purple", self.on_purple_button_click)
             ("1- Annotation", "lightcoral", self.on_red_button_click),
             ("2- Training", "lightsalmon", self.on_green_button_click),
             ("3- Prediction", "orchid", self.on_blue_button_click),
             ("4- Combine prediction with movie", "yellow", self.on_yellow_button_click),
-            ("Purple", "purple", self.on_purple_button_click)
+            
         ]
 
         # Create and pack buttons
@@ -53,4 +55,6 @@ class ColorfulButtonsApp:
         self.root.destroy()
 
     def on_purple_button_click(self):
-        messagebox.showinfo("Button Clicked", "Purple button clicked!")
+        #sample creation for annotation- choosing images
+        print(5)
+        self.root.destroy()

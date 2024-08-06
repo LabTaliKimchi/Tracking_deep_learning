@@ -1,0 +1,5 @@
+Create_sample_settings:
+  Folder_with_data: F:/Juna/test
+  list_frames: [1,300,5000,250]
+  number_first_movie: 0
+  video_file: F:/Juna/BMR2 vs BMR5 as stimulus 8.7.21_side_CUT.avi
