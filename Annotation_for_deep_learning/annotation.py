@@ -533,7 +533,7 @@ def main():
     #PATH_FOLDER = 'F://PoseYolo//train'
     #show message
     messagebox.showinfo("Note", "Create a folder with 2 subfolders called:\n images,labels\n create 2 other subfolders inside each one of these 2 folders:\n called: train and val ")
-    PATH_FOLDER = filedialog.askdirectory(title = 'Enter the directory which includes 2 folders,images and labels')
+    PATH_FOLDER = filedialog.askdirectory(title = 'Enter the directory which includes 2 folders,images and labels \n (note: labels folder is empty)')
     
     im_path = PATH_FOLDER + '//images//train//*.png'
    
