@@ -11,6 +11,7 @@ import pywt
 from scipy.signal import stft
 from scipy.signal import find_peaks
 import pandas as pd
+import stumpy
 
 class analysis_signal:
     
@@ -35,7 +36,7 @@ class analysis_signal:
       @staticmethod
       def plot_graphs(x ,y, title = 0, x_name = 0, y_name =0):
           plt.figure(figsize=(10, 4))
-          plt.plot(x, y)
+          plt.plot(x, y, '-o' )
           plt.title(title)
           plt.xlabel(x_name)
           plt.ylabel(y_name)
@@ -123,4 +124,20 @@ class analysis_signal:
           plt.grid()
           plt.show()
       
+      @staticmethod
       
+      def FindMotif(signal):          
+        # Example: your_signal is a 1D numpy array of your time series
+        m = 20  # motif length (choose based on expected pattern size)
+        matrix_profile = stumpy.stump(signal, m)
+
+        # Find the location of the best motif pair
+        motif_idx = np.argmin(matrix_profile[:, 0])
+        motif_pair = [motif_idx, int(matrix_profile[motif_idx, 1])]
+
+        # Plot the motifs
+        plt.plot(signal, label='Time Series')
+        for idx in motif_pair:
+            plt.plot(range(idx, idx + m), signal[idx:idx + m], linewidth=3)
+        plt.legend()
+        plt.show() 
