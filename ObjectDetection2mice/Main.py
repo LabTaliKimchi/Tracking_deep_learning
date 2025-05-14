@@ -11,6 +11,7 @@ import AuxiliaryFunctions as af
 import pandas as pd
 from openpyxl.workbook import Workbook
 import os
+import yaml
 
 
 def AnalyzeFrame(frame,annotated_frame,model,labels,skeleton):
@@ -50,13 +51,18 @@ def  modifylabels(labels):
 
 def main():
 #User settings
-    type_experiment = input('type of experiment:\nMice \nBlind moles from the side \nBlind moles from the top\n')
+    input_file = 'D:/Silvia/Blindmole_deep_learning/BMR22/TwoObjectDetection.yaml'
+    with open(input_file,'r') as file:
+       data = yaml.safe_load(file)
+
+
+    type_experiment = data['type_experiment']
     #values = ['Mice','Blind moles from the side','Blind moles from the top']  
-    number_models = int(input('Number of models in the experiment\n'))
+    number_models = len(data['file_model'])
     Models = []
    #%%
     for n in range(number_models):
-      file_model = input(f'File of the model {n+1}\n')
+      file_model = data['file_model'][n]
       model = YOLO(file_model)
       Models.append(model) 
 #Settings
@@ -68,8 +74,8 @@ def main():
     # Models = [model1,model2]
     
 # Open the video file
-    video_path = input('input file of the original video\n')
-    video_output = input('output file of the video\n')
+    video_path = data['video_path']
+    video_output = data['video_output']
     
     #get path and filename
     # Get directory and filename

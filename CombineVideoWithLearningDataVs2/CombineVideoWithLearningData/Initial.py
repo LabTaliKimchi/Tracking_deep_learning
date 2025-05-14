@@ -29,7 +29,8 @@ def main():
     #middle_tube_x = 555 #in pixel units
     # input_excel = 'F:/Juna/19_6_2024/BMR2 vs BMR5 as stimulus 8.7.21_side_CUT_YOLO_right1.xlsx'
     # input_excel_left = 'F:/Juna/19_6_2024/BMR2 vs BMR5 as stimulus 8.7.21_side_CUT_YOLO_left1.xlsx'
-    # input_video = 'F:/Juna/19_6_2024/BMR2 vs BMR5 as stimulus 8.7.21_side_CUT_YOLO_2blind_moles_5.avi'
+    # input_video = 'F:/Juna/19_6_2024/BMR2 vs BMR5 as st
+    # imulus 8.7.21_side_CUT_YOLO_2blind_moles_5.avi'
     # sheet_name = 'BMR'
     #column_name = 'BM_snout_y'
    # _outputVideo = 'F:/Juna/19_6_2024/BMR2 vs BMR5 as stimulus 8.7.21_side_CUT_YOLO_2blind_moles_6all_2graphs.avi'

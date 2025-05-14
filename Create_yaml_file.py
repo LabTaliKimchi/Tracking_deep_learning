@@ -1,18 +1,16 @@
 import yaml
-"""create yaml file with the settings
+"""create yaml for the object2mice detections
     """
 
 # Define the settings with several branches
-General_settings= {
-    'Create_sample_settings': {
-        'Folder_with_data': 'F:/Juna/test',
-        'video_file': 'f:/Juna/BMR2 vs BMR5 as stimulus 8.7.21_side_CUT.avi',
-        'list_frames': [1,100,530,640,2000],
-        'number_first_movie':1
-    },
-
+TwoObjectDetection_settings= {
+  'type_experiment' : 'Blind moles from the side',
+  'file_model' : ['D:/Silvia/Blindmole_deep_learning/models/yoloBMR_left_BMR_combined_videos_07.07.242/weights/best.pt',
+                  'D:/Silvia/Blindmole_deep_learning/models/yoloBMR_right_BMR_combined_videos_26.06.242/weights/best.pt'],
+    'video_path' : 'D:/Silvia/Blindmole_deep_learning/BMR2_cfosExp_exp1_27.10.21_side.avi',
+    'video_output' : 'D:/Silvia/Blindmole_deep_learning/output/BMR2_with_landmarks.avi'
 }
 
 # Write the settings to a YAML file
-with open('General_settings.yaml', 'w') as file:
-    yaml.dump(General_settings, file, default_flow_style=False)
+with open('TwoObjectDetection.yaml', 'w') as file:
+    yaml.dump(TwoObjectDetection_settings, file, default_flow_style=False)

@@ -8,10 +8,11 @@ from auxiliary_functions import auxiliary_functions
 import cv2
 from Frame_treatment import CreatePlot
 #Use Agg backend for canvas
-from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-import matplotlib.pyplot as plt
+
 # =============================================================================
 import matplotlib
+matplotlib.use('Agg') 
+import matplotlib.pyplot as plt
 import pandas as pd 
 import os
 
@@ -86,7 +87,7 @@ class Manager_data:
            height = img.shape[0]
            width = img.shape[1] 
            writer = cv2.VideoWriter(_outputVideo ,cv2.VideoWriter_fourcc('m', 'p', '4', 'v'), _fps, (width,height))
-           #self.writer = cv2.VideoWriter(self._outputVideo ,cv2.VideoWriter_fourcc('M','J','P','G'), 10, (width,height))
+          # writer = cv2.VideoWriter(_outputVideo ,cv2.VideoWriter_fourcc('M','J','P','G'), _fps, (width,height))
         writer.write(img)
         
         
