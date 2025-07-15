@@ -11,7 +11,13 @@ import pywt
 from scipy.signal import stft
 from scipy.signal import find_peaks
 import pandas as pd
+import os
+os.environ["NUMBA_DISABLE_CUDA"] = "1"
 import stumpy
+import matplotlib.cm as cm
+import plot_peaks
+import Caracterize_peaks
+from  class_pattern_detection import class_pattern_detection
 
 class analysis_signal:
     
@@ -124,12 +130,20 @@ class analysis_signal:
           plt.grid()
           plt.show()
       
+      '''
+      Find 2 motifs
+      '''
+      
       @staticmethod
       
-      def FindMotif(signal):          
+      def FindMotif(signal): 
+        signal = signal.values
+        time_series =  signal.ravel()  # or signal.flatten()        
         # Example: your_signal is a 1D numpy array of your time series
         m = 20  # motif length (choose based on expected pattern size)
-        matrix_profile = stumpy.stump(signal, m)
+        k=3
+        radius=2.0
+        matrix_profile = stumpy.stump(time_series, m)
 
         # Find the location of the best motif pair
         motif_idx = np.argmin(matrix_profile[:, 0])
@@ -141,3 +155,107 @@ class analysis_signal:
             plt.plot(range(idx, idx + m), signal[idx:idx + m], linewidth=3)
         plt.legend()
         plt.show() 
+         # Find top-k motifs using stumpy.motifs
+        a=1
+        
+      '''
+        Find k motifs
+        '''
+      def Find_k_motifs(signal):
+            m=100
+            k=10     
+            motif_indices = []
+                   
+            signal = signal.values
+            time_series =  signal.ravel()  # or signal.flatten()
+            #extract matrix profile
+            mp = stumpy.stump(time_series, m)
+            
+            # Extract the matrix profile and indices
+            matrix_profile = mp[:, 0]
+            profile_indices = mp[:, 1]
+            
+            profile = matrix_profile.copy()
+            for _ in range(k):
+                idx= np.argmin(profile)
+                match = profile_indices[idx]
+                motif_indices.append((idx, match))
+                # Exclude the neighborhood of the found motif to avoid trivial matches
+                exclusion_zone = int(m/2)
+                profile[max(0, idx - exclusion_zone):idx +exclusion_zone] = np.Inf
+                profile[max(0, match - exclusion_zone):match +exclusion_zone] = np.Inf
+    
+               # Plot original signal
+            plt.figure(figsize=(14, 4))
+            plt.plot(signal, color='black', linewidth=1, label='Original Signal')
+
+            # Overlay motifs using solid lines, unique color per motif
+            colors = cm.get_cmap('tab10', k)
+
+            for i, (a, b) in enumerate(motif_indices):
+                color = colors(i)
+                plt.plot(np.arange(a, a + m), signal[a:a + m], color=color, linewidth=2.5, label=f'Motif {i+1} A')
+                plt.plot(np.arange(b, b + m), signal[b:b + m], color=color, linestyle = '--', linewidth=2.5, label=f'Motif {i+1} B')
+
+            plt.title("Original Signal with Overlaid Motif Segments")
+            plt.xlabel("Time")
+            plt.ylabel("Value")
+            plt.legend()
+            plt.tight_layout()
+            plt.show()
+      '''
+      input: pattern,signal
+      output:find similar patterns accoss the signal
+      '''
+      def Find_similar_patterns(pattern, signal,threshold):
+           pattern_length = len(pattern)
+           signal = signal.values
+           signal_series = signal.ravel()
+           signal_series_aux =  analysis_signal.Normalized_data(signal.ravel())  # or signal.flatten()
+           
+           
+           pattern = pattern.values
+           pattern_series = pattern.ravel()
+           pattern_series_aux = analysis_signal.Normalized_data(pattern.ravel())
+           
+           
+           # Compute distance profile: similarity between pattern and every subsequence of same length in signal
+           distance_profile = stumpy.mass(pattern_series, signal_series)
+           
+           threshold = np.percentile(distance_profile, 0.5)  # 5% most similar
+           matches = np.where(distance_profile <= threshold)[0]
+           for idx in matches:
+               print(f"Match at index {idx}, distance {distance_profile[idx]}")
+           
+           return matches, pattern_length, distance_profile
+      '''
+       input: signal
+       output: normalized signal
+     ''' 
+      def Normalized_data(data):
+          data = (data -data.mean())/data.std()
+          return data
+     
+      '''
+      input: data as dictionary
+      output: data frame in pandas 
+      '''
+      def convert_into_data_frame(data):
+          df = pd.DataFrame.from_dict(data, orient='index', columns=['index', 'inter-peaks', 'inter-minimum','distance'])
+          return df
+            
+      def Resume_all(pattern, signal,threshold): 
+             instance1 = class_pattern_detection(pattern,signal)
+             matches,cross_correlation = instance1.proccessing_conv(threshold)
+             plot_peaks.plot_peaks(signal, matches, len(pattern))
+             a=1
+            # matches, pattern_length,distance_profile = analysis_signal.Find_similar_patterns(pattern, signal,threshold)
+             Patterns_dict = Caracterize_peaks.characterize_peaks_pattern(signal, matches, len(pattern),cross_correlation)
+             number_peaks = Caracterize_peaks.Find_peaks(pattern)
+             df = analysis_signal.convert_into_data_frame(Patterns_dict)
+            #  plot_peaks.plot_peaks(signal, matches, pattern_length)
+             
+            #  print(number_peaks)
+             return df
+           
+           

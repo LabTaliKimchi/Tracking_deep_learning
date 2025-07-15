@@ -7,21 +7,27 @@ Created on Thu Jul 18 11:55:41 2024
 import pandas as pd 
 from analysis_signal import analysis_signal
 import numpy as np
-from numba import cuda
+
+
 
 def main():
 
     #%% User input
-       input_data = 'D:/Silvia/Blindmole_deep_learning/BMR10/output/BMR10_with_landmarks_left_ToPlot.xlsx'
+       input_data = 'F:/BlindMole_tracking_Juna/2025/BMR10/BMR10/output/BMR10_with_landmarks_left_ToPlot.xlsx'
+       output_file = 'F:/BlindMole_tracking_Juna/2025/BMR10/BMR10/output/'
        _fps = 24.004
        sheet_name = 'BM_snout_y'
     #%%
        df = pd.read_excel(input_data, sheet_name=sheet_name)
        data = df[['Left_side']]
-
-       signal = data[250:350]
+       threshold = 0.9
+       pattern = data[5618:5637] #two peaks
+       signal = data
       # analysis_signal.plot_graphs(range(len(signal)), signal)
-       analysis_signal.FindMotif(signal)
+      # analysis_signal.Find_k_motifs(signal)
+       results = analysis_signal.Resume_all(pattern, signal,threshold)
+       results.to_excel(output_file + 'patterns.xlsx', index=False)
+      
        
        #%%
       #% data = data[1000:1100]
