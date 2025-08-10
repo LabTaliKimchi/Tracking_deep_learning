@@ -36,14 +36,20 @@ class GetFramesFromVideo:
         else:
          self._randomlist = selected_frames  
         
-    def Get_video(self):
-        count = 1
+    def Get_video(self,start_image):
+        count = start_image
         for frame_id in self._randomlist:
             self._vobj.set(cv2.CAP_PROP_POS_FRAMES,frame_id)
             ret,frame = self._vobj.read()
             if ret:
+               text_frame = f"Frame ID: {frame_id}"
+               font = cv2.FONT_HERSHEY_SIMPLEX
+               font_scale = 1
+               color = (0, 255, 0)  # Green
+               thickness = 2
+               cv2.putText(frame, text_frame, (10, 70), font, font_scale, color, thickness, cv2.LINE_AA)
              # if video is still left continue creating images
-               name = self._outputFolder + str(count) +"_image.png"
+               name = self._outputFolder + "/" + str(count) +"_image.png"
                cv2.imwrite(name,frame)
                count += 1
             else:
@@ -51,8 +57,10 @@ class GetFramesFromVideo:
         self._vobj.release()
     #    cv2.destroyAllWindows()
         
-def Get_Results(inputMovie,outputFolder,nframestotake,selected_frames):
+def Get_Results(inputMovie,outputFolder,nframestotake,selected_frames,start_image):
     new_object = GetFramesFromVideo(inputMovie,outputFolder,nframestotake)
     new_object.read_video()
     new_object.Create_list_frames(selected_frames)
-    new_object.Get_video()
+    new_object.Get_video(start_image)
+    start_image = start_image + nframestotake
+    return start_image 
