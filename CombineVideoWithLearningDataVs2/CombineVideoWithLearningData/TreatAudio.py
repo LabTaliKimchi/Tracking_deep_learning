@@ -6,8 +6,9 @@ Created on Thu Jul 11 07:59:28 2024
 
 Class to read audio and add audio
 """
-from moviepy.editor import VideoFileClip
+
 import os
+import ffmpeg
 
 class TreatAudio:
     def  __init__(self,original_video,_outputVideo):
@@ -19,37 +20,38 @@ class TreatAudio:
     output : extract audio
     '''
     def ExtractAudio(self):
-  
-       # Load the video clip
-       video_clip = VideoFileClip(self.file_original_video)
        #get path of the file
        file_path =  os.path.dirname(self.file_original_video)
+       audio_path = os.path.join(file_path, "extracted_audio.wav")
+
+      # Extract audio using ffmpeg
+       ffmpeg.input(self.file_original_video).output(audio_path, acodec='pcm_s16le').run(overwrite_output=True)
+
+       return audio_path, file_path
        
-       # Extract the audio
-       audio_clip = video_clip.audio
-       
-       # Save the audio as a WAV file
-       audio_clip.write_audiofile(file_path + '/' + "extracted_audio.wav", codec='pcm_s16le')
-       return audio_clip, file_path
    
     
     '''
     input: video, audio
     output : video with audio
     '''
-    def AddAudio(self, audio, file_path):
-        video = VideoFileClip(self.file_video_landmarks)
-        # Convert the audio to a compatible format (if necessary)
-        audio = audio.set_fps(video.fps)
-        # Set the audio of the video file
-        video = video.set_audio(audio)
-        # Output path for the final video with added audio
-        
+    def AddAudio(self, audio_path, file_path):
         output_path = file_path + '/' + 'video_with_audio.mp4'
+        # Define video and audio input streams
+        video_input = ffmpeg.input(self.file_video_landmarks)
+        audio_input = ffmpeg.input(audio_path)
+      # Merge video and audio using ffmpeg
+         # Merge video and audio
+        ffmpeg.output(
+        video_input,
+        audio_input,
+        output_path,
+        vcodec='copy',
+        acodec='aac',
+        strict='experimental'
+    ).run(overwrite_output=True)
 
-        # Write the video file with added audio
-        video.write_videofile(output_path, codec='libx264', audio_codec='aac')
-    
+
     '''
     Resume all files
     '''

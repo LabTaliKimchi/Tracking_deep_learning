@@ -51,7 +51,11 @@ def  modifylabels(labels):
 
 def main():
 #User settings
+<<<<<<< HEAD
     input_file = 'F:/BlindMole_tracking_Juna/2025/Uptraining/TwoObjectDetection.yaml'
+=======
+    input_file = 'D:/Silvia/Blindmole_deep_learning/BMR19/TwoObjectDetection.yaml'
+>>>>>>> 9f957b6fb21555b781186b37162140cc723d37be
     with open(input_file,'r') as file:
        data = yaml.safe_load(file)
 
