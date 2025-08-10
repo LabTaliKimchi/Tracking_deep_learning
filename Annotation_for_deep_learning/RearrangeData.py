@@ -8,6 +8,8 @@ import numpy as np
 import pandas as pd
 import glob
 from dask_image.imread import imread
+from natsort import natsorted
+
 '''
 This library treats the data from the napari to give the correct format
 '''
@@ -36,7 +38,7 @@ class HelperFunctions:
          
        #  print(size_list)
          count  = 0
-         filenames = sorted(glob.glob(im_path))
+         filenames = natsorted(glob.glob(im_path))
         # print(Data)
          while len(Data) > 0:
              #Remove first element of the list
@@ -154,7 +156,7 @@ def GetFilenames(PATH_FOLDER):
     #get all filenames of the images
     im_path = PATH_FOLDER + '//images//train//*.png'
     
-    filenames = sorted(glob.glob(im_path))
+    filenames = natsorted(glob.glob(im_path))
     
     for f in filenames:
        aux = PATH_FOLDER + '//labels//train//' + (((f.split('\\'))[1]).split('.'))[0] + '.txt'
@@ -197,7 +199,7 @@ Auxiliary functions
 Get a list with the size of each picture
 '''
 def getSize(im_path):
-    filenames = sorted(glob.glob(im_path))
+    filenames = natsorted(glob.glob(im_path))
     size_list = []
     for f in filenames:
         aux_s = imread(f)

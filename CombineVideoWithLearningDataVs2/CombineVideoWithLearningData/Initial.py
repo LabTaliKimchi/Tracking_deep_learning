@@ -61,7 +61,7 @@ def main():
     middle_tube_x = int(config['settings']['middle_tube_x'])
     _upper_tube = int(config['settings']['_upper_tube'])
     _lower_tube = int(config['settings']['_lower_tube'])
-    _fps = int(config['settings']['_fps'])
+    _fps = float(config['settings']['_fps'])
     _if_Cropped = int(config['settings']['_if_cropped'])
     _if_Plot_left = int(config['settings']['_if_plot_left'])
     _title = config['settings']['_title']
@@ -73,8 +73,8 @@ def main():
 
     #%%
     
-    Manager_data.Manager_data( middle_tube_y, middle_tube_x, input_excel, input_video, sheet_name, column_name, _outputVideo, _upper_tube, _lower_tube, _fps,_if_Cropped,
-                              _if_Plot_left, input_excel_left, _title,_xstart, _ystart, _xend, _yend)
+    # Manager_data.Manager_data( middle_tube_y, middle_tube_x, input_excel, input_video, sheet_name, column_name, _outputVideo, _upper_tube, _lower_tube, _fps,_if_Cropped,
+    #                           _if_Plot_left, input_excel_left, _title,_xstart, _ystart, _xend, _yend)
     instance_audio = TreatAudio(original_video,_outputVideo)
     instance_audio()
 

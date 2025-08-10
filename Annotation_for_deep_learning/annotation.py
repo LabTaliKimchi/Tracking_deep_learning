@@ -21,6 +21,9 @@ import AugmentationFunctions
 import os
 import ToInsertVisibilityInAnnotation as TIVIA
 from tkinter import messagebox
+from natsort import natsorted
+from auxiliary import load_labels_files
+from qtpy.QtWidgets import QFileDialog
 
 COLOR_CYCLE = [
     '#1f77b4',
@@ -207,6 +210,7 @@ def point_annotator(
     viewer.window.add_dock_widget(widget3,area='right')
     viewer.window.add_dock_widget(widget4,area='right')
     viewer.window.add_dock_widget(widget5,area='right')
+    viewer.window.add_dock_widget(widget6, area = 'right')
     
     napari.run()
 
@@ -285,7 +289,20 @@ def my_widget1(layer: napari.layers.Points,array:ImageData,layerShape:napari.lay
        arrange(shape,labels,points,rect,PATH_FOLDER)
       
        return 0
-   
+
+@magicgui(call_button="Load old annotations")   
+def widget6(layer: napari.layers.Points,layerShape:napari.layers.Shapes):
+    folder_selected = QFileDialog.getExistingDirectory(None,'Select folder with label without visibility .txt files')
+    if not folder_selected:
+        print("No folder selected.")
+        return
+    box, points, labels_all = load_labels_files(folder_selected, SHAPE_STACK[0], LABELS, SHAPE_STACK, PATH_FOLDER)
+    #clear existing points
+    layer.data = np.array(points)
+    layerShape.data = np.array(box)
+    layer.properties['label'] = np.array(labels_all)
+    
+    print("✅ Old annotations loaded.")  
     
    
 @magicgui(path={'mode': 'd'}, call_button='Run')
@@ -300,7 +317,7 @@ def widget2(path =  pathlib.Path.home()):
 @magicgui(call_button='Augment the data')
 def widget3( ):
     #get file with images
-    filenames = sorted(glob.glob(IM_PATH))
+    filenames = natsorted(glob.glob(IM_PATH))
     for f in filenames:
        print(f)
        object_augmentation = AugmentationFunctions.AugmentationFunctions(f,PATH_FOLDER)
@@ -314,7 +331,7 @@ def widget3( ):
 @magicgui(call_button='Augment images')
 def widget4( ):
     #get file with images
-    filenames = sorted(glob.glob(IM_PATH))
+    filenames = natsorted(glob.glob(IM_PATH))
     for f in filenames:
        object_augmentation = AugmentationFunctions.AugmentationFunctions(f,PATH_FOLDER)
        
@@ -376,7 +393,7 @@ def widget5( ):
 
 #Load the pictures as a stack
 def LoadImages(im_path):
-    filenames = sorted(glob.glob(im_path))
+    filenames = natsorted(glob.glob(im_path))
    # read the first file to get the shape and dtype
    # ASSUMES THAT ALL FILES SHARE THE SAME SHAPE/TYPE
     sample = imread(filenames[0])
@@ -537,7 +554,7 @@ def main():
     
     im_path = PATH_FOLDER + '//images//train//*.png'
    
-    filenames = sorted(glob.glob(im_path))
+    filenames = natsorted(glob.glob(im_path))
     
     print(filenames)
 
