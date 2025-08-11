@@ -12,7 +12,21 @@ import pandas as pd
 from openpyxl.workbook import Workbook
 import os
 import yaml
+import tkinter as tk
+from tkinter import filedialog, messagebox
 
+def select_input_file():
+    root = tk.Tk()
+    root.withdraw()  # Hide the root window
+    file_path = filedialog.askopenfilename(
+        title="Select configuration file *.yaml",
+        filetypes=[("All files", "*.yaml")]  # You can customize this
+    )
+    if file_path:
+        print("Selected file:", file_path)
+    else:
+        print("No file selected.")
+    return file_path
 
 def AnalyzeFrame(frame,annotated_frame,model,labels,skeleton):
     # Run YOLOv8 inference on the frame
@@ -51,11 +65,10 @@ def  modifylabels(labels):
 
 def main():
 #User settings
-<<<<<<< HEAD
-    input_file = 'F:/BlindMole_tracking_Juna/2025/Uptraining/TwoObjectDetection.yaml'
-=======
-    input_file = 'D:/Silvia/Blindmole_deep_learning/BMR19/TwoObjectDetection.yaml'
->>>>>>> 9f957b6fb21555b781186b37162140cc723d37be
+    #input_file = 'F:/BlindMole_tracking_Juna/2025/Uptraining/TwoObjectDetection.yaml'
+    messagebox.showinfo("Prepare a configuration, yaml, file as the example")
+    input_file = select_input_file()
+    
     with open(input_file,'r') as file:
        data = yaml.safe_load(file)
 
