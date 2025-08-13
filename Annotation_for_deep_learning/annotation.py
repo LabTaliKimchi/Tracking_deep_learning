@@ -40,11 +40,18 @@ COLOR_CYCLE = [
     '#9C661f',
     '#a52a2a',
     '#ffeda0',
-    '#800026',
+    '#543005',
     '#000000',
-    '#1f77b4',
-    '#ffffff'
+    '#fdbf6f',
+    '#ffffff',
+    '#e6550d',
+    '#addd8e',
+    '#9ebcda'
+    
 ]
+
+
+
 
 
 # COLOR_CYCLE = [
@@ -157,25 +164,47 @@ def point_annotator(
         # print(points)
         # print(labels)
   
-    properties = {'label': labels1} 
+   # build arrays
+    points = np.asarray(points, dtype=float)             # (N, 3)
+    labels_arr = np.asarray(labels1, dtype=object)       # (N,)
+
+# safe cycle (drop any weird entries)
+    SAFE_COLOR_CYCLE = [c for c in COLOR_CYCLE if c and c != '#0000']
+
+# map each unique label -> a hex color (cycle if you have more labels than colors)
+    uniq_labels = list(dict.fromkeys(labels_arr))        # preserve first-seen order
+    label_to_hex = {lab: SAFE_COLOR_CYCLE[i % len(SAFE_COLOR_CYCLE)]
+                for i, lab in enumerate(uniq_labels)}
+
+    def hex_to_rgba01(hx: str):
+     hx = hx.lstrip('#')
+     if len(hx) in (3,4): hx = ''.join(c*2 for c in hx)  # expand short forms
+     if len(hx) == 6: hx += 'FF'
+     r = int(hx[0:2],16)/255.0; g = int(hx[2:4],16)/255.0
+     b = int(hx[4:6],16)/255.0; a = int(hx[6:8],16)/255.0
+     return (r,g,b,a)
+
+    label_to_rgba = {lab: hex_to_rgba01(h) for lab, h in label_to_hex.items()}
+    face_rgba = np.asarray([label_to_rgba[lab] for lab in labels_arr], dtype=float)  # (N,4)
+
+# add points: pass numeric colors directly; keep 'label' for your UI
+    properties = {'label': labels_arr}
     points_layer = viewer.add_points(
-      points,
+    points,
     properties=properties,
-      edge_color='label',
-      edge_color_cycle=COLOR_CYCLE,
-      symbol='o',
-      face_color = 'label',
-      face_color_cycle=COLOR_CYCLE,
-      edge_width_is_relative = 8,
-      #size= SHAPE_STACK[0],
-      size = 30,#30
-      ndim=3,
-      name = "keypoints",
-     
-      )
-    points_layer.edge_color_mode = 'cycle'
-    points_layer.face_color_mode = 'cycle'
-    
+    face_color=face_rgba,          # numeric RGBA per point (no categorical parsing)
+    edge_color=face_rgba,
+    edge_width=1,
+    edge_width_is_relative=True,
+    symbol='o',
+    size=30,
+    ndim=3,
+    name="keypoints",
+)
+
+# (optional) set a starting label for your menu logic
+    points_layer.current_properties = {'label': np.array([uniq_labels[0]], dtype=object)}
+
    
         
 
@@ -451,8 +480,8 @@ def CreateListBox():
    elif SELECTION_Animal[0] == 'Blind moles from the top':
    
    # VALUES OF UP:
-       values =  ['BM_snout', 'BM_mouth', 'BM_ridge_top', 'BM_ridge_middle', 'BM_ridge_bottom', 'BM_head_right','BM_head_left', 'BM_right_front_leg', 'BM_left_front_leg','BM_right_rear_leg','BM_left_rear_leg','BM_behind', 'BM_right_back', 'BM_left_back', 'BM_centroid_left', 'BM_centroid_right']
-   
+       values =  ['BM_right_snout', 'BM_center_snout', 'BM_left_snout' , 'BM_mouth', 'BM_right_ridge', 'BM_left_ridge', 'BM_right_ear', 'BM_left_ear', 'BM_left_forelimb', 'BM_right_forelimb', 'BM_left_hindlimb', 'BM_right_hindlimb', 'BM_pelvic_base', 'BM_right_side', 'BM_left_side', 'BM_centr', 'BM_left_hip', 'BM_right_hip' ]
+   #values =  ['BM_snout', 'BM_mouth', 'BM_ridge_top', 'BM_ridge_middle', 'BM_ridge_bottom', 'BM_head_right','BM_head_left', 'BM_right_front_leg', 'BM_left_front_leg','BM_right_rear_leg','BM_left_rear_leg','BM_behind', 'BM_right_back', 'BM_left_back', 'BM_centroid_left', 'BM_centroid_right']
    
    
    
