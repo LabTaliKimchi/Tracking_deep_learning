@@ -59,7 +59,13 @@ COLOR_CYCLE = [
 #     '#ff7f0e',
 #     '#2ca02c'
 
-
+def hex_to_rgba01(hx: str):
+     hx = hx.lstrip('#')
+     if len(hx) in (3,4): hx = ''.join(c*2 for c in hx)  # expand short forms
+     if len(hx) == 6: hx += 'FF'
+     r = int(hx[0:2],16)/255.0; g = int(hx[2:4],16)/255.0
+     b = int(hx[4:6],16)/255.0; a = int(hx[6:8],16)/255.0
+     return (r,g,b,a)
 
 
 def create_label_menu(points_layer, labels):
@@ -176,13 +182,7 @@ def point_annotator(
     label_to_hex = {lab: SAFE_COLOR_CYCLE[i % len(SAFE_COLOR_CYCLE)]
                 for i, lab in enumerate(uniq_labels)}
 
-    def hex_to_rgba01(hx: str):
-     hx = hx.lstrip('#')
-     if len(hx) in (3,4): hx = ''.join(c*2 for c in hx)  # expand short forms
-     if len(hx) == 6: hx += 'FF'
-     r = int(hx[0:2],16)/255.0; g = int(hx[2:4],16)/255.0
-     b = int(hx[4:6],16)/255.0; a = int(hx[6:8],16)/255.0
-     return (r,g,b,a)
+    
 
     label_to_rgba = {lab: hex_to_rgba01(h) for lab, h in label_to_hex.items()}
     face_rgba = np.asarray([label_to_rgba[lab] for lab in labels_arr], dtype=float)  # (N,4)
