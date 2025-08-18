@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 import cv2
 
 class CreatePlot:
-    def  __init__(self,frame, data_to_plot, counter_frame,up_line, down_line,data_to_plot_left = 0,title = 0):
+    def  __init__(self,frame, data_to_plot, counter_frame,up_line, down_line,data_to_plot_left = [],title = []):
         self.frame = frame
         self.data_to_plot = data_to_plot
         self.counter_frame = counter_frame
@@ -23,8 +23,12 @@ class CreatePlot:
         self.lower = down_line
         if any(data_to_plot_left):
            self.data_to_plot_left = data_to_plot_left
+        else:
+            self.data_to_plot_left = []
         if any(title):
             self.title = title
+        else:
+            self.title = []
         
         
     '''
@@ -67,7 +71,7 @@ class CreatePlot:
         plt.axhline(y = self.upper, color = 'b', linestyle ='dashed', linewidth = 2)
         plt.axhline(y = self.lower, color = 'b', linestyle ='dashed', linewidth = 2)
         
-        plt.ylim((self.lower)*1.2,(self.upper)*1.2)
+        plt.ylim((self.lower)*1.5,(self.upper)*1.5)
         #%% add title
         plt.title(self.title,fontsize=18, color='blue', fontweight='bold')
         #%%

@@ -42,7 +42,7 @@ def main():
     # _if_Plot_left = 1
     
     #define yaml path
-   # file_path = 'conf-combination-video-data.ini'
+    #file_path = 'D:/Ragad/conf-combination-video-data_8_7_21_vs2.ini'
     file_path = open_file()
     config = configparser.ConfigParser()
     config.read(file_path)
@@ -62,11 +62,10 @@ def main():
     middle_tube_x = int(config['settings']['middle_tube_x'])
     _upper_tube = int(config['settings']['_upper_tube'])
     _lower_tube = int(config['settings']['_lower_tube'])
-<<<<<<< HEAD
+
     _fps = float(config['settings']['_fps'])
-=======
-    _fps = config['settings']['_fps']
->>>>>>> 9f957b6fb21555b781186b37162140cc723d37be
+
+
     _if_Cropped = int(config['settings']['_if_cropped'])
     _if_Plot_left = int(config['settings']['_if_plot_left'])
     _title = config['settings']['_title']
@@ -78,12 +77,8 @@ def main():
 
     #%%
     
-    # Manager_data.Manager_data( middle_tube_y, middle_tube_x, input_excel, input_video, sheet_name, column_name, _outputVideo, _upper_tube, _lower_tube, _fps,_if_Cropped,
-<<<<<<< HEAD
-    #                           _if_Plot_left, input_excel_left, _title,_xstart, _ystart, _xend, _yend)
-=======
-    #                          _if_Plot_left, input_excel_left, _title,_xstart, _ystart, _xend, _yend)
->>>>>>> 9f957b6fb21555b781186b37162140cc723d37be
+    Manager_data.Manager_data( middle_tube_y, middle_tube_x, input_excel, input_video, sheet_name, column_name, _outputVideo, _upper_tube, _lower_tube, _fps,_if_Cropped,
+                              _if_Plot_left, input_excel_left, _title,_xstart, _ystart, _xend, _yend)
     instance_audio = TreatAudio(original_video,_outputVideo)
     instance_audio()
 

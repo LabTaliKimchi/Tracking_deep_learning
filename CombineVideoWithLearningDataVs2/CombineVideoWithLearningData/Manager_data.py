@@ -42,7 +42,7 @@ class Manager_data:
             Manager_data.Create_new_movie(input_video, data_to_plot,_outputVideo,_fps, up_line, down_line,_if_Cropped,data_to_plot_left, title,
                                           xstart, ystart, xend, yend)
              
-   def Create_new_movie(input_video, data_to_plot,_outputVideo,_fps,up_line, down_line, _if_Cropped,data_to_plot_left = 0,title = 0,
+   def Create_new_movie(input_video, data_to_plot,_outputVideo,_fps,up_line, down_line, _if_Cropped,data_to_plot_left = [],title = [],
                         xstart = 0, ystart = 0, xend = 0, yend = 0):
     matplotlib.pyplot. ioff()
     #counter
