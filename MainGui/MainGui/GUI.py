@@ -20,7 +20,7 @@ class ColorfulButtonsApp:
 
         # Define button configurations with labels, colors, and callback functions
         button_configs = [
-            ("O- Sample creation", "purple", self.on_purple_button_click)
+            ("O- Sample creation", "purple", self.on_purple_button_click),
             ("1- Annotation", "lightcoral", self.on_red_button_click),
             ("2- Training", "lightsalmon", self.on_green_button_click),
             ("3- Prediction", "orchid", self.on_blue_button_click),
